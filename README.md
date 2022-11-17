@@ -238,7 +238,7 @@ On the left side, we see a gradual flattening from the relatively inexpensive ou
 
 Here are a few samples from the ZIP codes on the right side of the graph (areas that tend to have super-high sales prices, not super-low rental prices)
 
-![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true)
+![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true "Description")
 
 ![Forrest Hills, Washington D.C.](/Images/forest-hills.png?raw=true)
 
