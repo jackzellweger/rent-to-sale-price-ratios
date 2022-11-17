@@ -382,7 +382,7 @@ We can also review the data in a less visual but still effective way by looking 
 
 A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices. I've addeds stars in the table above next to the most promising ZIP codes.
 
-1. For example, it looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
+1. It looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
 2. Another interesting prospect is `48089` in Warren, Michigan. It has another really good rent:sale price ratio at 1.15%, and a median sales price of $105,000.
 
 These are the kinds of properties that  and start exploring those areas on Google Maps. Two great prospects worthy of further investigation!
