@@ -238,34 +238,48 @@ On the left side, we see a gradual flattening from the relatively inexpensive ou
 
 Here are a few samples from the ZIP codes on the right side of the graph (areas that tend to have super-high sales prices, not super-low rental prices)
 
-Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%):
+**Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%)**
 
 <img src="/Images/paradise-valley.png" width="400">
 
-Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
+**Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%)**
 
 <img src="/Images/forest-hills.png" width="400">
 
-1 E 45th St, New York City, NY 10036. Rent:sale = 0.001538, 0.15%:
+**1 E 45th St, New York City, NY 10036. Rent:sale = 0.001538, 0.15%**
 
 <img src="/Images/nyc.png" width="400">
 
-**Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%):**
+**Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%)**
 
 <img src="/Images/lombard-street.png" width="400">
 
 
+Clearly some of the wealthiest areas of the country.
+
+### What The Left Side of The Curve Looks Like
+
+Let’s take a look at some of the ZIP codes with the lowest rent:sale price ratio. I took off the filter to really find the outliers in the U.S.
 
 
+**Castle Point, St. Louis, MO. Rent:sale = 0.016429 (1.6%)**
+
+<img src="/Images/st-louis.png" width="400">
 
 
+**Inkster, MI 48141. Rent:sale = 0.014719 (1.5%)**
+
+<img src="/Images/inkster.png" width="400">
 
 
+**Baltimore, MD 21223. Rent:sale = 0.014077 (1.4%)**
+
+<img src="/Images/baltimore.png" width="400">
 
 
+**Jan Phyl Village, FL 33880. Rent:sale = 0.008456 (.85%)**
 
-
-
+<img src="/Images/jan-phyl.png" width="400">
 
 
 
