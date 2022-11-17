@@ -389,9 +389,8 @@ These are the kinds of properties that  and start exploring those areas on Googl
 
 ### Future work
 
-- Do you think you’d be able to count the number of houses that contributed to the average of the sales medians and then filter out the zip codes below some threshold $n$? This could be a future addition to make the data cleaner.
-- Email Redfin asking why there’s not rental data
-- Could you get this as historical data and show how it evolves over time.
+- Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold $n$?
+- Could build an animated graph of the `RentToSalesRatio` graph as historical data and show how it evolves over time.
 
 ---
 
