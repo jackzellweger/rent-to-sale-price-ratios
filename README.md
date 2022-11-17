@@ -373,9 +373,9 @@ We can also review the data in a less visual but still effective way by looking 
  33484                225000.0              2855.0         0.012689
  38127                 71000.0               892.0         0.012563
  38128                105950.0              1279.0         0.012072
- 21213                120500.0              1421.0         0.011793
+ *21213               120500.0              1421.0         0.011793
  64128                 83250.0               969.0         0.011640
- 48089                105000.0              1216.0         0.011581
+ *48089               105000.0              1216.0         0.011581
  38115                113975.0              1301.0         0.011415
  64130                 87857.5               965.0         0.010984]
 ```
@@ -395,7 +395,7 @@ These are the kinds of properties that  and start exploring those areas on Googl
 
 ---
 
-*** I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up.*
+*** I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up.
 
 
 
