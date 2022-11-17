@@ -241,7 +241,7 @@ Here are a few samples from the ZIP codes on the right side of the graph (areas 
 Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%):
 ![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true)
 
-<img src="/Images/paradise-valley.png" width="100" height="100">
+<img src="/Images/paradise-valley.png" width="400">
 
 Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
 ![Forrest Hills, Washington D.C.](/Images/forest-hills.png?raw=true)
