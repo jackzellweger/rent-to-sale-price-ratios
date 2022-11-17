@@ -239,7 +239,7 @@ On the left side, we see a gradual flattening from the relatively inexpensive ou
 Here are a few samples from the ZIP codes on the right side of the graph (areas that tend to have super-high sales prices, not super-low rental prices)
 
 Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%):
-![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true | width = 100)
+![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true | width=100)
 
 Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
 ![Forrest Hills, Washington D.C.](/Images/forest-hills.png?raw=true)
