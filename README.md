@@ -375,12 +375,12 @@ We can also review the data in a less visual but still effective way by looking 
  38128                105950.0              1279.0         0.012072
  *21213              *120500.0             *1421.0        *0.011793
  64128                 83250.0               969.0         0.011640
- *48089              *105000.0             *1216.0        *0.011581
+ *48089              *105000.0             *1216.0        *s0.011581
  38115                113975.0              1301.0         0.011415
  64130                 87857.5               965.0         0.010984]
 ```
 
-A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices:
+A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices. I've addeds stars in the table above next to the most promising ZIP codes.
 
 1. For example, it looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
 2. Another interesting prospect is `48089` in Warren, Michigan. It has another really good rent:sale price ratio at 1.15%, and a median sales price of $105,000.
@@ -395,7 +395,7 @@ These are the kinds of properties that  and start exploring those areas on Googl
 
 ---
 
-*** I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up.
+*** _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
 
 
 
