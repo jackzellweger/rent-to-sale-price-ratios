@@ -250,7 +250,7 @@ Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
 
 <img src="/Images/nyc.png" width="400">
 
-Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%):
+**Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%):**
 
 <img src="/Images/lombard-street.png" width="400">
 
