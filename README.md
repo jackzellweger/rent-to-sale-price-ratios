@@ -229,9 +229,8 @@ s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(20,7), use_index=Fals
 s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=False);
 ```
 
-<div style="width:60px">
+
 ![Plot of rent:sale price ratio by array index.](/Images/ratios-plot.png?raw=true)
-<div>
 
 On the left side, we see a gradual flattening from the relatively inexpensive outliers into what looks like something linear. Then, as we approach the right side, we see a rapid drop-off. This represents super-expensive properties in Manhattan, NY and Los Angeles, CA. These are places where it’s relatively easy to rent (though still expensive), but disproportionately expensive to buy.
 
