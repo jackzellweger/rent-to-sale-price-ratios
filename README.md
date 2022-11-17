@@ -243,13 +243,16 @@ Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%):
 <img src="/Images/paradise-valley.png" width="400">
 
 Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
-![Forrest Hills, Washington D.C.](/Images/forest-hills.png?raw=true)
+
+<img src="/Images/forest-hills.png" width="400">
 
 1 E 45th St, New York City, NY 10036. Rent:sale = 0.001538, 0.15%:
-![Forrest Hills, Washington D.C.](/Images/nyc.png?raw=true)
+
+<img src="/Images/nyc.png" width="400">
 
 Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%):
-![Forrest Hills, Washington D.C.](/Images/lombard-street.png?raw=true)
+
+<img src="/Images/lombard-street.png" width="400">
 
 
 
