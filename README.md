@@ -10,5 +10,5 @@ Was there a way to turn these vast datasets into actionable insights that my fri
 
 So, I set out to make a heatmap of this sales price to rental price ratio across the country. I wanted to end up with something like this. Maybe I could even make it user-friendly and even a bit interactive; could I make it so when I hover my mouse over each polygon, I get a ZIP code and ratio?
 
-![Alt text](/images/example-heatmap.png?raw=true "Example Heatmap")
+![Example Heatmap](images/example-heatmap.png?raw=true "Example Heatmap")
 
