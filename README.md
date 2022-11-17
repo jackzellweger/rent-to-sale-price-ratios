@@ -395,7 +395,7 @@ These are the kinds of properties that  and start exploring those areas on Googl
 
 ---
 
-*** _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
+* _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
 
 
 
