@@ -134,4 +134,134 @@ booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
 
 ***Now, we have two dataframes…***
 
+`salesByZip`
+
+```python
+ 17778 rows x 2 columns
+ --
+ Key        RegionName CurrentSalesPrice
+ 0          01001      246427.772727
+ 1          01002      366060.784314
+ 2          01005      338977.870968
+ 3          01007      325266.818182
+ 4          01008      258950.000000
+ ...          ...                ...
+ 17773      99705      274772.050000
+ 17774      99709      252503.333333
+ 17775      99712      309830.000000
+ 17776      99714      256000.000000
+ 17777      99725      147000.000000
+```
+
+`currentRentalPrices`
+
+```python
+ 2166 rows x 2 columns
+ --
+ Key       RegionName         CurrentRentalPrice
+ 0         10025              3329.0
+ 1         60657              1588.0
+ 2         10023              3917.0
+ 3         77494              1697.0
+ 4         60614              1989.0
+ ...         ...                 ...
+ 2161      23507              1586.0
+ 2162      10282              7427.0
+ 2163      60606              2236.0
+ 2164      10006              3654.0
+ 2165       2109              3023.0
+```
+
+### Joining The Normalized Data Into One Table
+
+***Perfect! We’ve normalized the data, and are ready to initiate a join…***
+
+```python
+# We set the key to the ZIP codes and join them based on that key
+# all in one step here, setting the resulting dataframe equal to 'combined'
+combined=salesByZip.set_index('RegionName').join(currentRentalPrices.set_index('RegionName'))
+
+# Since there were fewer ZIP codes with rental data associated with it,
+# there's are a lot of rows with only sales data. We'll delete those rows here.
+rentalsAndSales = combined.dropna()
+
+# We calculate a rent:sale price ratio, and stick it into a new column
+# called `'RentToSaleRatio'.
+rentalsAndSales["RentToSaleRatio"] = rentalsAndSales["CurrentRentalPrice"]/rentalsAndSales["CurrentSalesPrice"]
+```
+
+***Let’s do some further cleaning…***
+
+```python
+# Filter out the extrema greater than .017, or %1.7
+# I found this is a good cut-off
+rentalsAndSalesFiltered = rentalsAndSales[rentalsAndSales.RentToSaleRatio < .017]
+
+# Sort all the values by rent:sale price ratio
+rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(by='RentToSaleRatio', ascending=False)
+
+# Plot the 
+s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(20,7), use_index=False);
+```
+
+***After all that processing, we end up with a dataframe like this…***
+
+```python
+ 1905 rows x 3 columns
+ --
+ RegionName       CurrentSalesPrice         CurrentRentalPrice  RentToSaleRatio                                                        
+ 32210            1.676159e+05              1424.0         0.008496
+ 32211            1.823551e+05              1545.0         0.008472
+ 34235            2.868396e+05              2430.0         0.008472
+ 76014            2.165649e+05              1832.0         0.008459
+ 33880            1.924022e+05              1627.0         0.008456
+ ...                       ...                 ...              ...
+ 10011            5.716669e+06              4283.0         0.000749
+ 10021            4.256849e+06              3046.0         0.000716
+ 10128            4.718165e+06              3000.0         0.000636
+ 10075            4.298317e+06              2677.0         0.000623
+ 10028            4.922165e+06              2933.0         0.000596
+```
+
+***If we plot it, we end up with something like this…***
+
+```python
+s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=False);
+```
+
+![Plot of rent:sale price ratio by array index.](/Images/ratios-plot.png?raw=true)
+
+On the left side, we see a gradual flattening from the relatively inexpensive outliers into what looks like something linear. Then, as we approach the right side, we see a rapid drop-off. This represents super-expensive properties in Manhattan, NY and Los Angeles, CA. These are places where it’s relatively easy to rent (though still expensive), but disproportionately expensive to buy.
+
+### What The Right Side of The Curve Looks Like
+
+Here are a few samples from the ZIP codes on the right side of the graph (areas that tend to have super-high sales prices, not super-low rental prices)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
