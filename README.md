@@ -238,13 +238,17 @@ On the left side, we see a gradual flattening from the relatively inexpensive ou
 
 Here are a few samples from the ZIP codes on the right side of the graph (areas that tend to have super-high sales prices, not super-low rental prices)
 
-![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true "Description")
+Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%):
+![Paradise Valley, AZ](/Images/paradise-valley.png?raw=true)
 
+Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%):
 ![Forrest Hills, Washington D.C.](/Images/forest-hills.png?raw=true)
 
+1 E 45th St, New York City, NY 10036. Rent:sale = 0.001538, 0.15%:
+![Forrest Hills, Washington D.C.](/Images/nyc.png?raw=true)
 
-
-
+Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%):
+![Forrest Hills, Washington D.C.](/Images/lombard-street.png?raw=true)
 
 
 
