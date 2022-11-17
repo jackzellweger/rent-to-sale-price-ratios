@@ -281,6 +281,149 @@ Let’s take a look at some of the ZIP codes with the lowest rent:sale price rat
 
 <img src="/Images/jan-phyl.png" width="400">
 
+### Visualizing Rent:sale Price Ratios On A Map
+
+***Let’s visualize some of this data on a map. First, I export the processed data from my Jupyter notebook into Mathematica…***
+
+```python
+# Export the data in two colums for Mathematica
+filepath = Path('data_output/out.csv')  
+filepath.parent.mkdir(parents=True, exist_ok=True)
+
+# Go up to entry 1800, even though we only have
+rentalsAndSalesSorted.loc[:,'RentToSaleRatio'][0:1800].to_csv(filepath)
+```
+
+***We’re now in Mathematica. First, I import and clean the two-column dataset…***
+
+```mathematica
+(* I import the data *)
+data = Drop[
+   Import["path/to/file.csv", "Data"], 1];
+
+(* I then do some simple type conversion*)
+cleanData = (MapAt[ToString, #, 1]) & /@ data;
+
+(* And use Mathematica's built-in interpreter to convert the simple
+5-character ZIP code strings into ZIP code objects *)
+ZIPTuples = (MapAt[Interpreter["ZIPCode"], #, 1]) & /@ cleanData;
+```
+
+***Then we declare a function that will plot our ZIP code when we plug in a geographic entity like “United States” or “Memphis”…***
+
+```mathematica
+(* These parameters direct things like map tile resolution, projection type,
+and padding *)
+plotFunction[x_] := 
+ GeoRegionValuePlot[ZIPTuples, 
+  ImageSize -> Medium, PlotStyle -> Directive[EdgeForm[]], 
+  GeoRange -> x, GeoRangePadding -> Scaled[0.1], 
+  GeoProjection -> "Mercator", GeoZoomLevel -> 6]
+```
+
+We can now use this function and *Mathematica’s* [Natural Language Input](https://www.wolfram.com/language/fast-introduction-for-programmers/en/natural-language-input/) feature to get a map pretty much anywhere in the U.S.
+
+***Let’s try the entire U.S. to see where our data is concentrated…***
+
+```mathematica
+plotFunction /@{Entity["Country","UnitedStates"]}
+```
+
+![Heatmap of The U.S.](/Images/heatmap-us.png?raw=true)
+
+
+These computations took on the order of 5 minutes to complete and render a single map. We can start to see that the data (probably constrained by the Zillow rental data) mostly fills the urban areas of the U.S. That’s no surprise. We can start zooming into different metro areas to get a feel for which areas might be more
+
+**Atlanta, GA**
+
+<img src="/Images/heatmap-atlanta.png" width="300">
+
+**Boca Raton, FL**
+
+<img src="/Images/heatmap-boca-raton.png" width="300">
+
+**Detroit, MI**
+
+<img src="/Images/heatmap-detroit.png" width="300">
+
+
+These maps provide excellent starting points when searching for investment properties. We can start our property searches in the red areas, looking for ZIP codes with rental prices that are relatively high when compared to the sales price.
+
+### Looking At The Data Directly
+
+We can also review the data in a less visual but still effective way by looking at the sales data directly in our ratios table.
+
+***Let’s take the first $n$ rows of our sorted data frame of rent:sale price ratios…***
+
+```mathematica
+[rentalsAndSalesSorted.head(15)]
+```
+
+***Here’s our result...***
+
+```mathematica
+ RegionName.          CurrentSalesPrice     CurrentRentalPrice  RentToSaleRatio
+ 48227                 62475.0              1038.0         0.016615
+ 63136                 60000.0               996.0         0.016600
+ 19132                 79750.0              1180.0         0.014796
+ 48141                 75000.0              1078.0         0.014373
+ 33446                246250.0              3369.0         0.013681
+ 33434                241250.0              3209.0         0.013302
+ 45405                 70812.5               900.0         0.012710
+ 33484                225000.0              2855.0         0.012689
+ 38127                 71000.0               892.0         0.012563
+ 38128                105950.0              1279.0         0.012072
+ 21213                120500.0              1421.0         0.011793
+ 64128                 83250.0               969.0         0.011640
+ 48089                105000.0              1216.0         0.011581
+ 38115                113975.0              1301.0         0.011415
+ 64130                 87857.5               965.0         0.010984]
+```
+
+A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices:
+
+1. For example, it looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
+2. Another interesting prospect is `48089` in Warren, Michigan. It has another really good rent:sale price ratio at 1.15%, and a median sales price of $105,000.
+
+These are the kinds of properties that  and start exploring those areas on Google Maps. Two great prospects worthy of further investigation!
+
+### Future work
+
+- Do you think you’d be able to count the number of houses that contributed to the average of the sales medians and then filter out the zip codes below some threshold $n$? This could be a future addition to make the data cleaner.
+- Email Redfin asking why there’s not rental data
+- Could you get this as historical data and show how it evolves over time.
+
+---
+
+*** I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up.*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
