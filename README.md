@@ -47,3 +47,91 @@ While Redfin compels you to download data for a single time frame and blasts you
 ### Normalizing The Data
 
 I envisioned ending up with a table like this:
+
+| ZIP Code (Key) | Median Price | Median Rental Price | Rent to Sale Price Ratio |
+| --- | --- | --- | --- |
+| 33063 | 42750.0 | 2137.0 | 0.049988 |
+| 33063 | 42750.0 | 2137.0 | 0.04998 |
+
+1. A simple table that used the ZIP code as a key
+2. a column with median selling price
+3. a column with median monthly rent price
+4. Then, a new column—the rent:sale price ratio—based on column 2 and 3.
+
+My main tool for crunching numbers had historically been Python’s SciPy library, but that seemed like overkill for this project. After some Googling, I decided to use Python and the Pandas library to tackle this problem. I had never used Pandas or the library’s ‘Dataframe’ objects, but it’s so simple!
+
+***First, I imported the data…***
+
+```python
+sales = pd.read_csv('Redfin_SalePricesByZip.tsv000', sep='\t',header=0)
+rentals = pd.read_csv('Zip_ZORI_AllHomesPlusMultifamily_Smoothed.csv', sep=',',header=0)
+```
+
+***Then I took the sales data, and cleaned it up a bit…***
+
+```python
+# Take the data from just 2021
+salesCleanedZip = sales[sales["period_begin"].str.contains("2021")]
+
+# Extract just the ZIP code numbers from the column with the regex string'(\d+)'
+salesCleanedZip['region'] = sales['region'].str.extract('(\d+)')
+
+# Simplify the dataframe, isolating the 'region' and 'median_sale_price'
+salesSimplified = salesCleanedZip.filter(items=['region','median_sale_price'])
+
+# Isolate the 'region' and 'median_sale_price', then group, and find the
+# median of each of the groups of like zips
+salesByZip = salesSimplified.groupby(['region']).median()
+
+# Reset the index. This is necessary in order to rename and manipulate the
+# two primary columns we're working with here.
+salesByZip = salesByZip.reset_index()
+
+# Rename the column 'region' to 'RegionName'
+salesByZip = salesByZip.rename(columns={'region':'RegionName'})
+
+# Rename the column 'median_sale_price' to 'CurrentSalesPrice'
+salesByZip = salesByZip.rename(columns={'median_sale_price':'CurrentSalesPrice'})
+```
+
+***Then ran some sanity checks on the sales data…***
+
+```python
+# Check the sales data for any duplicate ZIP Codes. We're looking for this
+# to return 'False', which it did
+booleanSales = salesByZip['RegionName'].duplicated().any()
+
+# Check individual ZIP Code sales rows, just to gut check prices
+# I used my old ZIP code in midtown and then a few ZIP codes where
+# I used to live in Ohio. All came back sane and expected.
+salesByZip.loc[salesByZip['RegionName'] == '10017']
+
+```
+
+***I then cleaned up the rental data…***
+
+```python
+# Filtering out all the columns that aren't 'RegionName' and the
+# price data, which is designated by the month, in this case Feb 2022
+currentRentalPrices = rentals.filter(items=['RegionName','2022-02'])
+
+# Renaming the column that contains the current rental price because
+# it looks nicer
+currentRentalPrices = currentRentalPrices.rename(columns={'2022-02':'CurrentRentalPrice'})
+
+# Type casting the region name column from a int type to a str to match
+# the type in the sales price dataframe. Again, it's important that the
+# data types match when we join the sales and rental data frames
+currentRentalPrices = currentRentalPrices.astype({'RegionName':'str'})
+```
+
+***Ran a couple tests…***
+
+```python
+# Ensuring that there aren't any duplicate ZIP codes in the rental table
+booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
+```
+
+***Now, we have two dataframes…***
+
+
