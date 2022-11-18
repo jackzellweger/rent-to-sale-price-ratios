@@ -332,7 +332,7 @@ plotFunction /@{Entity["Country","UnitedStates"]}
 ![Heatmap of The U.S.](/Images/heatmap-us.png?raw=true)
 
 
-These computations took on the order of 5 minutes to complete and render a single map. We can start to see that the data (probably constrained by the Zillow rental data) mostly fills the urban areas of the U.S. That’s no surprise. We can start zooming into different metro areas to get a feel for which areas might be more
+These computations took on the order of 5 minutes to complete and render a single map. We can start to see that the data (probably constrained by the Zillow rental data) mostly fills the urban areas of the U.S. That’s no surprise. We can start zooming into different metro areas to get more detail.
 
 **Atlanta, GA**
 
@@ -353,7 +353,7 @@ These maps provide excellent starting points when searching for investment prope
 
 We can also review the data in a less visual but still effective way by looking at the sales data directly in our ratios table.
 
-***Let’s take the first $n$ rows of our sorted data frame of rent:sale price ratios…***
+***Let’s take the first n rows of our sorted data frame of rent:sale price ratios…***
 
 ```mathematica
 [rentalsAndSalesSorted.head(15)]
@@ -389,7 +389,7 @@ These are the kinds of properties that  and start exploring those areas on Googl
 
 ### Future work
 
-- Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold $n$?
+- Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold _n_?
 - Could build an animated graph of the `RentToSalesRatio` graph as historical data and show how it evolves over time.
 
 ---
