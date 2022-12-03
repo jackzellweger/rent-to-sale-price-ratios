@@ -4,7 +4,8 @@ import pandas as pd
 
 # DATA IMPORTS
 sales = pd.read_csv('Redfin_SalePricesByZip.tsv000', sep='\t', header=0)
-rentals = pd.read_csv('Zip_ZORI_AllHomesPlusMultifamily_Smoothed.csv', sep=',', header=0)
+rentals = pd.read_csv('Zip_ZORI_AllHomesPlusMultifamily_Smoothed.csv', sep=',',
+                      header=0)
 
 # SALES DATA COLLECTION & CLEANING
 # SOLVES THE PROBLEM OF SALES DATA W/ MULTIPLE ZIPS
@@ -19,7 +20,8 @@ salesCleanedZip['region'] = sales['region'].str.extract('(\d+)')
 # salesSimplified = salesCleanedZip[['region', 'median_sale_price']]
 salesSimplified = salesCleanedZip.filter(items=['region', 'median_sale_price'])
 
-# Isolate the 'region' and 'median_sale_price', then groups, and takes the mean of the zips
+# Isolate the 'region' and 'median_sale_price', then groups, and takes the mean
+# of the zips
 salesByZip = salesSimplified.groupby(['region']).median()
 
 # Reset the index
@@ -30,27 +32,34 @@ salesByZip = salesByZip.reset_index()
 salesByZip = salesByZip.rename(columns={'region': 'RegionName'})
 
 # Rename the column 'median_sale_price' to 'CurrentSalesPrice'
-salesByZip = salesByZip.rename(columns={'median_sale_price': 'CurrentSalesPrice'})
+salesByZip = salesByZip.rename(
+    columns={'median_sale_price': 'CurrentSalesPrice'})
 
 # RENTAL DATA COLLECTION & CLEANING
 currentRentalPrices = rentals.filter(items=['RegionName', '2022-02'])
-currentRentalPrices = currentRentalPrices.rename(columns={'2022-02': 'CurrentRentalPrice'})
+currentRentalPrices = currentRentalPrices.rename(
+    columns={'2022-02': 'CurrentRentalPrice'})
 currentRentalPrices = currentRentalPrices.astype({'RegionName': 'str'})
 
 # Ensuring that there aren't any duplicate Zip codes in the rental table
 booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
 
 # JOINING THE DATABASE, CLEANING, & CALCULATING RENT:SALES
-combined = salesByZip.set_index('RegionName').join(currentRentalPrices.set_index('RegionName'))
+combined = salesByZip.set_index('RegionName').join(
+    currentRentalPrices.set_index('RegionName'))
 rentalsAndSales = combined.dropna()
-rentalsAndSales["RentToSaleRatio"] = rentalsAndSales["CurrentRentalPrice"] / rentalsAndSales["CurrentSalesPrice"]
+rentalsAndSales["RentToSaleRatio"] = rentalsAndSales["CurrentRentalPrice"] / \
+                                     rentalsAndSales["CurrentSalesPrice"]
 
 # FILTERING OUT THE OUTLIERS
-rentalsAndSalesFiltered = rentalsAndSales[rentalsAndSales.RentToSaleRatio < .017]
-rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(by='RentToSaleRatio', ascending=False)
+rentalsAndSalesFiltered = rentalsAndSales[
+    rentalsAndSales.RentToSaleRatio < .017]
+rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(
+    by='RentToSaleRatio', ascending=False)
 
 # PLOTTING THE ZIP CODES BY RENT:SALES
-s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio', figsize=(10, 7), use_index=False)
+s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio', figsize=(10, 7),
+                                use_index=False)
 
 # EXPORTING FOR MATHEMATICA (2 COLUMNS)
 filepath = Path('data_output/out.csv')
