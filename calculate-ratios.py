@@ -1,67 +1,97 @@
 # LIBRARY IMPORTS
 from pathlib import Path
 import pandas as pd
+import warnings
 
 # DATA IMPORTS
 sales = pd.read_csv('Redfin_SalePricesByZip.tsv000', sep='\t', header=0)
 rentals = pd.read_csv('Zip_ZORI_AllHomesPlusMultifamily_Smoothed.csv', sep=',',
                       header=0)
 
-# SALES DATA COLLECTION & CLEANING
-# SOLVES THE PROBLEM OF SALES DATA W/ MULTIPLE ZIPS
+# -- SALES DATA COLLECTION & CLEANING --
 
 # Take the data from just 2021
-salesCleanedZip = sales[sales["period_begin"].str.contains("2021")]
+salesSelectTimeframe = sales[sales["period_begin"].str.contains("2021")]
 
 # Clean up the zips
-salesCleanedZip['region'] = sales['region'].str.extract('(\d+)')
+salesSelectTimeframe['region'] = sales['region'].str.extract('(\d+)')
 
 # Simplify the dataframe, isolating the 'region' and 'median_sale_price'
-# salesSimplified = salesCleanedZip[['region', 'median_sale_price']]
-salesSimplified = salesCleanedZip.filter(items=['region', 'median_sale_price'])
+salesTwoColumn = salesSelectTimeframe.filter(
+    items=['region', 'median_sale_price'])
 
 # Isolate the 'region' and 'median_sale_price', then groups, and takes the mean
 # of the zips
-salesByZip = salesSimplified.groupby(['region']).median()
+medianSalesByZip = salesTwoColumn.groupby(['region']).median()
 
 # Reset the index
-# We might not need this if we use the .filter() dot-extension above.
-salesByZip = salesByZip.reset_index()
+medianSalesByZip = medianSalesByZip.reset_index()
 
 # Rename the column 'region' to 'RegionName'
-salesByZip = salesByZip.rename(columns={'region': 'RegionName'})
+medianSalesByZip = medianSalesByZip.rename(columns={'region': 'RegionName'})
 
 # Rename the column 'median_sale_price' to 'CurrentSalesPrice'
-salesByZip = salesByZip.rename(
+medianSalesByZip = medianSalesByZip.rename(
     columns={'median_sale_price': 'CurrentSalesPrice'})
 
-# RENTAL DATA COLLECTION & CLEANING
-currentRentalPrices = rentals.filter(items=['RegionName', '2022-02'])
-currentRentalPrices = currentRentalPrices.rename(
+# -- RENTAL DATA COLLECTION & CLEANING --
+
+# Rename '2022-02' to 'RegionName'
+rentalSelectTimeframe = rentals.filter(items=['RegionName', '2022-02'])
+
+# Rename '2022-02' to 'CurrentRentalPrice'
+rentalSelectTimeframe = rentalSelectTimeframe.rename(
     columns={'2022-02': 'CurrentRentalPrice'})
-currentRentalPrices = currentRentalPrices.astype({'RegionName': 'str'})
 
-# Ensuring that there aren't any duplicate Zip codes in the rental table
-booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
+# Convert the 'RegionName' column to strings
+rentalSelectTimeframe = rentalSelectTimeframe.astype({'RegionName': 'str'})
 
-# JOINING THE DATABASE, CLEANING, & CALCULATING RENT:SALES
-combined = salesByZip.set_index('RegionName').join(
-    currentRentalPrices.set_index('RegionName'))
-rentalsAndSales = combined.dropna()
-rentalsAndSales["RentToSaleRatio"] = rentalsAndSales["CurrentRentalPrice"] / \
-                                     rentalsAndSales["CurrentSalesPrice"]
+# Ensure there aren't any duplicate ZIP codes in the rental dataframe
+booleanRentals = rentalSelectTimeframe['RegionName'].duplicated().any()
 
-# FILTERING OUT THE OUTLIERS
-rentalsAndSalesFiltered = rentalsAndSales[
-    rentalsAndSales.RentToSaleRatio < .017]
-rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(
+# Throw an error if there are somehow duplicate ZIP codes in the rental
+# dataframe
+if(booleanRentals != False):
+    warnings.warn("Duplicate ZIP codes in the rental dataframe. Unexpected or "
+                  "inaccurate results are possible.", RuntimeWarning)
+
+# -- JOINING THE DATABASE, CLEANING, & CALCULATING RENT:SALES --
+
+# Join sales and rental data into one dataframe
+salesRentSparse = medianSalesByZip.set_index('RegionName').join(
+    rentalSelectTimeframe.set_index('RegionName'))
+
+# Drop any rows with missing rental data (there is more sales than rental data)
+salesRent = salesRentSparse.dropna()
+
+# Create a new column equal to rent:sale ratio
+salesRent["RentToSaleRatio"] = salesRent["CurrentRentalPrice"] / \
+                               salesRent["CurrentSalesPrice"]
+
+# -- FILTERING OUT THE OUTLIERS --
+
+# Remove all rows above a certain rent:sales ratio
+saleRentFiltered = salesRent[
+    salesRent.RentToSaleRatio < .017]
+
+# Sort by rent:sales ratio
+saleRentSorted = saleRentFiltered.sort_values(
     by='RentToSaleRatio', ascending=False)
 
-# PLOTTING THE ZIP CODES BY RENT:SALES
-s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio', figsize=(10, 7),
-                                use_index=False)
+# -- PLOTTING THE ZIP CODES BY RENT:SALES --
 
-# EXPORTING FOR MATHEMATICA (2 COLUMNS)
+# This plots the rent:sales ratios, using the DataFrame's index as the
+# x-axis values
+plotRatioByIndex = saleRentSorted.plot(
+    y='RentToSaleRatio', figsize=(10, 7), use_index=False)
+
+# Save the chart to a file
+plotRatioByIndex.savefig("rental_and_sales_ratio.png")
+
+# -- EXPORTING FOR MATHEMATICA (2 COLUMNS) --
 filepath = Path('data_output/out.csv')
 filepath.parent.mkdir(parents=True, exist_ok=True)
-rentalsAndSalesSorted.loc[:, 'RentToSaleRatio'][0:1800].to_csv(filepath)
+
+# Save the first xx (in this case, 1800) values out in CSV file that
+# Mathematica can read
+saleRentSorted.loc[:, 'RentToSaleRatio'][0:1800].to_csv(filepath)
