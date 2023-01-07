@@ -68,7 +68,8 @@ sales = pd.read_csv('zip_code_market_tracker.tsv000', sep='\t',header=0)
 
 # Imported rental data from Zillow
 # Converted ZIP codes to strings and filled in with leading zeroes
-rentals = pd.read_csv('Zip_zori_sm_month.csv', sep=',', header=0, converters={'RegionName': lambda x: x.zfill(5)})
+rentals = pd.read_csv('Zip_zori_sm_month.csv', sep=',', header=0, 
+   converters={'RegionName': lambda x: x.zfill(5)})
 ```
 
 ***Then I took the sales data, and cleaned it up a bit…***
