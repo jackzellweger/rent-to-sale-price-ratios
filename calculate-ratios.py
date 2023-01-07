@@ -36,22 +36,25 @@ medianSalesByZip = medianSalesByZip.rename(
 
 # -- RENTAL DATA COLLECTION & CLEANING --
 
-# Rename '2022-02' to 'RegionName'
-rentalSelectTimeframe = rentals.filter(items=['RegionName', '2022-02'])
+# Select timeframe using regex
+rentalSelectTimeframe = rentals[['RegionName']].join(rentals.filter(
+    regex='2022'))
 
-# Rename '2022-02' to 'CurrentRentalPrice'
-rentalSelectTimeframe = rentalSelectTimeframe.rename(
-    columns={'2022-02': 'CurrentRentalPrice'})
+# The 'melt' puts each cell of each column in its own row, preserving each
+# row's association with its respective 'RegionName' property:
+rentalMelted = rentalSelectTimeframe.melt(id_vars='RegionName',
+                                          var_name='Date',
+                                          value_name='CurrentRentalPrice')
 
-# Convert the 'RegionName' column to strings
-rentalSelectTimeframe = rentalSelectTimeframe.astype({'RegionName': 'str'})
+# Take the median of all the rental prices with the same index
+rentalGrouped = rentalMelted.groupby('RegionName').median().reset_index()
 
 # Ensure there aren't any duplicate ZIP codes in the rental dataframe
-booleanRentals = rentalSelectTimeframe['RegionName'].duplicated().any()
+booleanRentals = rentalGrouped['RegionName'].duplicated().any()
 
 # Throw an error if there are somehow duplicate ZIP codes in the rental
 # dataframe
-if(booleanRentals != False):
+if (booleanRentals != False):
     warnings.warn("Duplicate ZIP codes in the rental dataframe. Unexpected or "
                   "inaccurate results are possible.", RuntimeWarning)
 
@@ -59,7 +62,7 @@ if(booleanRentals != False):
 
 # Join sales and rental data into one dataframe
 salesRentSparse = medianSalesByZip.set_index('RegionName').join(
-    rentalSelectTimeframe.set_index('RegionName'))
+    rentalGrouped.set_index('RegionName'))
 
 # Drop any rows with missing rental data (there is more sales than rental data)
 salesRent = salesRentSparse.dropna()
