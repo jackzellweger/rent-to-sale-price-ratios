@@ -111,25 +111,25 @@ salesByZip.loc[salesByZip['RegionName'] == '10017']
 ***I then cleaned up the rental data…***
 
 ```python
-# Filtering out all the columns that aren't 'RegionName' and the
-# price data, which is designated by the month, in this case Feb 2022
-currentRentalPrices = rentals.filter(items=['RegionName','2022-02'])
+# Select timeframe using regex
+rentalSelectTimeframe = rentals[['RegionName']].join(rentals.filter(
+    regex='2022'))
 
-# Renaming the column that contains the current rental price because
-# it looks nicer
-currentRentalPrices = currentRentalPrices.rename(columns={'2022-02':'CurrentRentalPrice'})
+# The 'melt' puts each cell of each column in its own row, preserving each
+# row's association with its respective 'RegionName' property:
+rentalMelted = rentalSelectTimeframe.melt(id_vars='RegionName',
+                                          var_name='Date',
+                                          value_name='CurrentRentalPrice')
 
-# Type casting the region name column from a int type to a str to match
-# the type in the sales price dataframe. Again, it's important that the
-# data types match when we join the sales and rental data frames
-currentRentalPrices = currentRentalPrices.astype({'RegionName':'str'})
+# Take the median of all the rental prices with the same index
+rentalGrouped = rentalMelted.groupby('RegionName').median().reset_index()
 ```
 
-***Ran a couple tests…***
+***Ran a quick test...***
 
 ```python
-# Ensuring that there aren't any duplicate ZIP codes in the rental table
-booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
+# Ensure there aren't any duplicate ZIP codes in the rental dataframe
+booleanRentals = rentalGrouped['RegionName'].duplicated().any()
 ```
 
 ***Now, we have two dataframes…***
@@ -153,7 +153,7 @@ booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
  17777      99725      147000.000000
 ```
 
-`currentRentalPrices`
+`rentalGrouped`
 
 ```python
  2166 rows x 2 columns
@@ -179,7 +179,7 @@ booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
 ```python
 # We set the key to the ZIP codes and join them based on that key
 # all in one step here, setting the resulting dataframe equal to 'combined'
-combined=salesByZip.set_index('RegionName').join(currentRentalPrices.set_index('RegionName'))
+combined = salesByZip.set_index('RegionName').join(rentalGrouped.set_index('RegionName'))
 
 # Since there were fewer ZIP codes with rental data associated with it,
 # there's are a lot of rows with only sales data. We'll delete those rows here.
@@ -201,7 +201,7 @@ rentalsAndSalesFiltered = rentalsAndSales[rentalsAndSales.RentToSaleRatio < .017
 rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(by='RentToSaleRatio', ascending=False)
 
 # Plot the 
-s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(20,7), use_index=False);
+s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(20,7), use_index=False);
 ```
 
 ***After all that processing, we end up with a dataframe like this…***
@@ -226,7 +226,7 @@ s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(20,7), use_index=Fals
 ***If we plot it, we end up with something like this…***
 
 ```python
-s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=False);
+s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=False);
 ```
 
 
