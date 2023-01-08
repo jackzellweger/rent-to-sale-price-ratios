@@ -5,8 +5,8 @@ import warnings
 
 # DATA IMPORTS
 sales = pd.read_csv('Redfin_SalePricesByZip.tsv000', sep='\t', header=0)
-rentals = pd.read_csv('Zip_ZORI_AllHomesPlusMultifamily_Smoothed.csv', sep=',',
-                      header=0)
+rentals = pd.read_csv('Zip_zori_sm_month.csv', sep=',', header=0,
+   converters={'RegionName': lambda x: x.zfill(5)})
 
 # -- SALES DATA COLLECTION & CLEANING --
 
