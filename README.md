@@ -1,4 +1,8 @@
-# Finding investment opportunities
+# Finding Investment Opportunities
+
+### Try It Here
+
+[Click here](https://stellar-khapse-0bf486.netlify.app/)
 
 ### Motivation
 
