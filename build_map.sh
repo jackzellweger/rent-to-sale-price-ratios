@@ -1,5 +1,11 @@
 #!/bin/sh
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $SCRIPT_DIR
+
+echo $SCRIPT_DIR
+
 # DOWNLOAD & UNZIP SALES DATA
 echo "Downloading sales data..."
 wget "https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz"
@@ -21,7 +27,7 @@ echo "Rental data download complete..."
 # DOWNLOAD ZIP CODE POLYGONS
 echo "Downloading polygon data..."
 wget "https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_zcta520_500k.zip"
-mkdir ./data/polygons
+mkdir ./data/polygon
 mv cb_2020_us_zcta520_500k.zip ./data/polygon
 echo "Polygon data download complete..."
 
@@ -32,6 +38,5 @@ echo "Polygon data unzip complete"
 
 # EXECUTE JUPYTER NOTEBOOK
 echo "Running python script..."
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
 echo "Python script complete"

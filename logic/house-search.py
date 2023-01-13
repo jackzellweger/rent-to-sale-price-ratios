@@ -18,13 +18,8 @@ import os
 
 # 2023 DATA IMPORTS
 
-sales = pd.read_csv('../data/jan-2023-rental-sales-data/zip_code_market_tracker.tsv000', sep='\t',header=0)
-rentals = pd.read_csv('../data/jan-2023-rental-sales-data/Zip_zori_sm_month.csv', sep=',', header=0, converters={'RegionName': lambda x: x.zfill(5)})
-
-# Alternatives
-# baseDir = os.path.dirname(os.path.realpath(__file__))
-# sales = os.path.join(baseDir, "data/jan-2023-rental-sales-data/zip_code_market_tracker.tsv000")
-# rentals = os.path.join(baseDir, "data/jan-2023-rental-sales-data/Zip_zori_sm_month.csv")
+sales = pd.read_csv('../data/sales/zip_code_market_tracker.tsv000', sep='\t',header=0)
+rentals = pd.read_csv('../data/rental/Zip_zori_sm_month.csv', sep=',', header=0, converters={'RegionName': lambda x: x.zfill(5)})
 
 
 # In[3]:
@@ -103,7 +98,7 @@ rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(by='RentToSaleRatio'
 
 
 # IMPORTING SHAPEFILES
-shapefile = '../data/polygons/cb_2020_us_zcta520_500k/cb_2020_us_zcta520_500k.shp'
+shapefile = '../data/polygon/cb_2020_us_zcta520_500k.shp'
 gdf = gpd.read_file(shapefile)
 
 # SETTING UP BASE MAP
