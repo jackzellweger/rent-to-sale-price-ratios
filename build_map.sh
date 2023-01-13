@@ -1,36 +1,37 @@
 #!/bin/sh
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
 # DOWNLOAD & UNZIP SALES DATA
 echo "Downloading sales data..."
-wget "https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz" -O temp.tsv000.gz
+wget "https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz"
+mkdir ./data/sales
+mv zip_code_market_tracker.tsv000.gz ./data/sales
 echo "Sales data download complete."
 
 echo "Unzipping sales data..."
-gzip -d temp.tsv000.gz
-rm temp.tsv000.gz
-mv zip_code_market_tracker.tsv000 ./data/
+gzip -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz
 echo "Sales data unzip complete."
 
 # DOWNLOAD RENTAL DATA
 echo "Downloading rental data..."
 wget "https://files.zillowstatic.com/research/public_csvs/zori/Zip_zori_sm_month.csv"
+mkdir ./data/rental
 mv Zip_zori_sm_month.csv ./data/rental
 echo "Rental data download complete..."
 
 # DOWNLOAD ZIP CODE POLYGONS
 echo "Downloading polygon data..."
 wget "https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_zcta520_500k.zip"
-mv cb_2020_us_zcta520_500k.zip ./data/polygons
+mkdir ./data/polygons
+mv cb_2020_us_zcta520_500k.zip ./data/polygon
 echo "Polygon data download complete..."
 
 echo "Unzipping polygon data..."
-unzip ./data/polygons/cb_2020_us_zcta520_500k.zip -d ./data/polygons
-rm ./data/polygons/cb_2020_us_zcta520_500k.zip
+unzip ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
+rm ./data/polygon/cb_2020_us_zcta520_500k.zip
 echo "Polygon data unzip complete"
 
 # EXECUTE JUPYTER NOTEBOOK
 echo "Running python script..."
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
 echo "Python script complete"
