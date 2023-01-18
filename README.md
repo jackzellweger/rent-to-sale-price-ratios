@@ -239,7 +239,7 @@ s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=Fa
 ```
 
 
-![Plot of rent:sale price ratio by array index.](/Images/ratios-plot.png?raw=true)
+![Plot of rent:sale price ratio by array index.](./Images/ratios-plot.png?raw=true)
 
 On the left side, we see a gradual flattening from the relatively inexpensive outliers into what looks like something linear. Then, as we approach the right side, we see a rapid drop-off. This represents super-expensive properties in Manhattan, NY and Los Angeles, CA. These are places where it’s relatively easy to rent (though still expensive), but disproportionately expensive to buy.
 
@@ -249,7 +249,7 @@ Here are a few samples from the ZIP codes on the right side of the graph (areas 
 
 **Paradise Valley, Arizona 85253. Rent:sale = 0.001398 (.14%)**
 
-<img src="/Images/paradise-valley.png" width="400">
+<img src="./images/paradise-valley.png" width="400">
 
 **Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%)**
 
