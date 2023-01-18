@@ -1,10 +1,8 @@
 #!/bin/sh
 
+# NAVIGATE TO SCRIPT DIRECTORY
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
 cd $SCRIPT_DIR
-
-echo $SCRIPT_DIR
 
 # DOWNLOAD & UNZIP SALES DATA
 echo "Downloading sales data..."
@@ -14,7 +12,7 @@ mv zip_code_market_tracker.tsv000.gz ./data/sales
 echo "Sales data download complete."
 
 echo "Unzipping sales data..."
-gzip -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz
+gzip -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz file after unzip
 echo "Sales data unzip complete."
 
 # DOWNLOAD RENTAL DATA
