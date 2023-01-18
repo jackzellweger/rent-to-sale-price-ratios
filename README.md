@@ -14,7 +14,7 @@ Was there a way to turn these vast datasets into actionable insights that my fri
 
 So, I set out to make a heatmap of this sales price to rental price ratio across the country. I wanted to end up with something like this. Maybe I could even make it user-friendly and even a bit interactive; could I make it so when I hover my mouse over each polygon, I get a ZIP code and ratio?
 
-![Example Heatmap](./Images/example-heatmap.png?raw=true)
+![Example Heatmap](./images/example-heatmap.png?raw=true)
 
 ### Getting The Sales Data
 
@@ -239,7 +239,7 @@ s2 = rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=Fa
 ```
 
 
-![Plot of rent:sale price ratio by array index.](./Images/ratios-plot.png?raw=true)
+![Plot of rent:sale price ratio by array index.](./images/ratios-plot.png?raw=true)
 
 On the left side, we see a gradual flattening from the relatively inexpensive outliers into what looks like something linear. Then, as we approach the right side, we see a rapid drop-off. This represents super-expensive properties in Manhattan, NY and Los Angeles, CA. These are places where it’s relatively easy to rent (though still expensive), but disproportionately expensive to buy.
 
@@ -253,15 +253,15 @@ Here are a few samples from the ZIP codes on the right side of the graph (areas 
 
 **Forest Hills, Washington D.C. 20008. Rent:sale = 0.001587 (0.16%)**
 
-<img src="/Images/forest-hills.png" width="400">
+<img src="./images/forest-hills.png" width="400">
 
 **1 E 45th St, New York City, NY 10036. Rent:sale = 0.001538, 0.15%**
 
-<img src="/Images/nyc.png" width="400">
+<img src="./images/nyc.png" width="400">
 
 **Lombard Street, San Francisco, California 94109. Rent:sale = 0.001301 (0.13%)**
 
-<img src="/Images/lombard-street.png" width="400">
+<img src="./images/lombard-street.png" width="400">
 
 
 Clearly some of the wealthiest areas of the country.
@@ -273,22 +273,22 @@ Let’s take a look at some of the ZIP codes with the lowest rent:sale price rat
 
 **Castle Point, St. Louis, MO. Rent:sale = 0.016429 (1.6%)**
 
-<img src="/Images/st-louis.png" width="400">
+<img src="./images/st-louis.png" width="400">
 
 
 **Inkster, MI 48141. Rent:sale = 0.014719 (1.5%)**
 
-<img src="/Images/inkster.png" width="400">
+<img src="./images/inkster.png" width="400">
 
 
 **Baltimore, MD 21223. Rent:sale = 0.014077 (1.4%)**
 
-<img src="/Images/baltimore.png" width="400">
+<img src="./images/baltimore.png" width="400">
 
 
 **Jan Phyl Village, FL 33880. Rent:sale = 0.008456 (.85%)**
 
-<img src="/Images/jan-phyl.png" width="400">
+<img src="./images/jan-phyl.png" width="400">
 
 ### Visualizing Rent:sale Price Ratios On A Map
 
@@ -338,22 +338,22 @@ We can now use this function and *Mathematica’s* [Natural Language Input](http
 plotFunction /@{Entity["Country","UnitedStates"]}
 ```
 
-![Heatmap of The U.S.](/Images/heatmap-us.png?raw=true)
+![Heatmap of The U.S.](./images/heatmap-us.png?raw=true)
 
 
 These computations took on the order of 5 minutes to complete and render a single map. We can start to see that the data (probably constrained by the Zillow rental data) mostly fills the urban areas of the U.S. That’s no surprise. We can start zooming into different metro areas to get more detail.
 
 **Atlanta, GA**
 
-<img src="/Images/heatmap-atlanta.png" width="300">
+<img src="./images/heatmap-atlanta.png" width="300">
 
 **Boca Raton, FL**
 
-<img src="/Images/heatmap-boca-raton.png" width="300">
+<img src="./images/heatmap-boca-raton.png" width="300">
 
 **Detroit, MI**
 
-<img src="/Images/heatmap-detroit.png" width="300">
+<img src="./images/heatmap-detroit.png" width="300">
 
 
 These maps provide excellent starting points when searching for investment properties. We can start our property searches in the red areas, looking for ZIP codes with rental prices that are relatively high when compared to the sales price.
