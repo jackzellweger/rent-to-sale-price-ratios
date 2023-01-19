@@ -404,7 +404,9 @@ The *Mathematica* visualization works. But it's kind of clunky. I wanted a way t
 
 *Mathematica* was a great prototype, but I wanted something faster — something that could run on its own on a server. So, I had to find a new technology stack and a set of libraries I could use.
 
-**Sourcing The Polygons:** ZIP code polygons came from *Mathematica* before, so I knew I needed to find a new source.  As it turns out, `census.gov` has a comprehensive library of polygons for every ZIP code in the United States.
+**Sourcing The Polygons**
+
+ZIP code polygons came from *Mathematica* before, so I knew I needed to find a new source.  As it turns out, `census.gov` has a comprehensive library of polygons for every ZIP code in the United States.
 
 ```python
 # IMPORTING SHAPEFILES
@@ -412,7 +414,9 @@ shapefile = '../data/polygon/cb_2020_us_zcta520_500k.shp'
 gdf = gpd.read_file(shapefile)
 ```
 
-**Generating An Interactive Map:** I found a library called `folium` that can generate an interactive map javascript map, and then plot polygons on it!
+**Generating An Interactive Map**
+
+I found a library called `folium` that can generate an interactive map javascript map, and then plot polygons on it!
 
 We use the following script to generate a `folium` map, and then add each ZIP code's polygon to it. Notice that we color code the map according to the rent:sale price ratio with `branca.colormap`, and we add tooltips to each polygon with the folium.Popup()` function.
 
@@ -458,9 +462,13 @@ We then save out the map to a `.html` file...
 m.save('../web_build/index.html')
 ```
 
-**Hosting A Simple Website:** I could have set up a server at Linode or some similar service. However, there are turnkey static site hosts that just ask you to upload a `.html` without any of the fuss around installing Apache or any other web server software.
+**Hosting A Simple Website**
 
-**Making It Happen Automatically:** I wanted this whole apparatus to run automatically at the press of a button. I didn't even want to have to download the datasets manually. Everything had to happen without any intervention on my part.
+I could have set up a server at Linode or some similar service. However, there are turnkey static site hosts that just ask you to upload a `.html` without any of the fuss around installing Apache or any other web server software.
+
+**Making It Happen Automatically**
+
+I wanted this whole apparatus to run automatically at the press of a button. I didn't even want to have to download the datasets manually. Everything had to happen without any intervention on my part.
 
 So, I wrote a shell script that creates a directory structure, downloads all the needed data, and then runs a Python script.
 
