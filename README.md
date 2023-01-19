@@ -513,6 +513,7 @@ The last line in the Python script that this shell script executes exports the `
 
 - Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold _n_?
 - Could build an animated graph of the `RentToSalesRatio` graph as historical data and show how it evolves over time.
+- Upload to and run on a server, add `cron` scheduling.
 
 ---
 
