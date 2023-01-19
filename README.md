@@ -290,6 +290,44 @@ Let’s take a look at some of the ZIP codes with the lowest rent:sale price rat
 
 <img src="./images/jan-phyl.png" width="400">
 
+### Looking At The Data Directly
+
+We can also review the data in a less visual but still effective way by looking at the sales data directly in our ratios table.
+
+***Let’s take the first n rows of our sorted data frame of rent:sale price ratios…***
+
+```mathematica
+[rentalsAndSalesSorted.head(15)]
+```
+
+***Here’s our result...***
+
+```mathematica
+ RegionName.          CurrentSalesPrice     CurrentRentalPrice  RentToSaleRatio
+ 48227                 62475.0              1038.0         0.016615
+ 63136                 60000.0               996.0         0.016600
+ 19132                 79750.0              1180.0         0.014796
+ 48141                 75000.0              1078.0         0.014373
+ 33446                246250.0              3369.0         0.013681
+ 33434                241250.0              3209.0         0.013302
+ 45405                 70812.5               900.0         0.012710
+ 33484                225000.0              2855.0         0.012689
+ 38127                 71000.0               892.0         0.012563
+ 38128                105950.0              1279.0         0.012072
+ *21213              *120500.0             *1421.0        *0.011793
+ 64128                 83250.0               969.0         0.011640
+ *48089              *105000.0             *1216.0        *0.011581
+ 38115                113975.0              1301.0         0.011415
+ 64130                 87857.5               965.0         0.010984]
+```
+
+A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices. I've addeds stars in the table above next to the most promising ZIP codes.
+
+1. It looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
+2. Another interesting prospect is `48089` in Warren, Michigan. It has another really good rent:sale price ratio at 1.15%, and a median sales price of $105,000.
+
+These are the kinds of properties that  and start exploring those areas on Google Maps. Two great prospects worthy of further investigation!
+
 ### Visualizing Rent:sale Price Ratios On A Map
 
 ***Let’s visualize some of this data on a map. First, I export the processed data from my Jupyter notebook into Mathematica…***
@@ -358,43 +396,118 @@ These computations took on the order of 5 minutes to complete and render a singl
 
 These maps provide excellent starting points when searching for investment properties. We can start our property searches in the red areas, looking for ZIP codes with rental prices that are relatively high when compared to the sales price.
 
-### Looking At The Data Directly
+### Publishing The Map To The Web
 
-We can also review the data in a less visual but still effective way by looking at the sales data directly in our ratios table.
+The *Mathematica* visualization works. But it's kind of clunky. I wanted a way to publish this map to an interactive map on the web, but then I also wanted to find a way to dynamically update the map when new renal and sales data became available.
 
-***Let’s take the first n rows of our sorted data frame of rent:sale price ratios…***
+**Choosing A Python GIS Library**
 
-```mathematica
-[rentalsAndSalesSorted.head(15)]
+*Mathematica* was a great prototype, but I wanted something faster — something that could run on its own on a server. So, I had to find a new technology stack and a set of libraries I could use.
+
+**Sourcing The Polygons:** ZIP code polygons came from *Mathematica* before, so I knew I needed to find a new source.  As it turns out, `census.gov` has a comprehensive library of polygons for every ZIP code in the United States.
+
+```python
+# IMPORTING SHAPEFILES
+shapefile = '../data/polygon/cb_2020_us_zcta520_500k.shp'
+gdf = gpd.read_file(shapefile)
 ```
 
-***Here’s our result...***
+**Generating An Interactive Map:** I found a library called `folium` that can generate an interactive map javascript map, and then plot polygons on it!
 
-```mathematica
- RegionName.          CurrentSalesPrice     CurrentRentalPrice  RentToSaleRatio
- 48227                 62475.0              1038.0         0.016615
- 63136                 60000.0               996.0         0.016600
- 19132                 79750.0              1180.0         0.014796
- 48141                 75000.0              1078.0         0.014373
- 33446                246250.0              3369.0         0.013681
- 33434                241250.0              3209.0         0.013302
- 45405                 70812.5               900.0         0.012710
- 33484                225000.0              2855.0         0.012689
- 38127                 71000.0               892.0         0.012563
- 38128                105950.0              1279.0         0.012072
- *21213              *120500.0             *1421.0        *0.011793
- 64128                 83250.0               969.0         0.011640
- *48089              *105000.0             *1216.0        *0.011581
- 38115                113975.0              1301.0         0.011415
- 64130                 87857.5               965.0         0.010984]
+We use the following script to generate a `folium` map, and then add each ZIP code's polygon to it. Notice that we color code the map according to the rent:sale price ratio with `branca.colormap`, and we add tooltips to each polygon with the folium.Popup()` function.
+
+This script took some hacking to get right, but I finally made it work by introducing some fancy `json` stuff.
+
+```python
+# A BIT OF DATA CLEANING
+baseMap = rentalsAndSalesSorted.join(gdf.set_index('NAME20'
+        )).dropna().sort_values('RegionName')
+gdf1 = gpd.GeoDataFrame(baseMap, geometry='geometry')
+
+# SETTING THE BASE MAP
+m = folium.Map(location=[40.70, -98.94], zoom_start=4.0,
+               tiles='CartoDB positron')
+color_map = branca.colormap.LinearColormap(['red', 'green'],
+        vmin=0.000, vmax=0.016)
+
+# PLOTTING EACH POLYGON ON THE MAP
+for (_, r) in gdf1.iterrows():
+    shape_column = gpd.GeoSeries(r['geometry'
+                                 ]).simplify(tolerance=0.001)
+    color = color_map(r['RentToSaleRatio'])
+    geo_j = shape_column.to_json()
+    geo_j_json = json.loads(geo_j)
+    geo_j_json['features'][0]['properties']['ratio'] = \
+        r['RentToSaleRatio']
+    geo_j = folium.GeoJson(data=geo_j_json, style_function=lambda x: {
+            'fillColor': color_map(x['properties']['ratio']),
+            'color': 'black',
+            'weight': 0,
+            'fillOpacity': 0.9,
+            })
+    folium.Popup(str('{:.2f}% <br> {} <br> ${:,.0f} <br> ${:,.0f} '.format(r['RentToSaleRatio'
+                 ] * 100, str(r['GEOID20']).zfill(5),
+                 r['CurrentSalesPrice'], r['CurrentRentalPrice'
+                 ]))).add_to(geo_j)
+    geo_j.add_to(m)
 ```
 
-A good strategy here might be to look for ZIP codes with the “best” rent:sale price ratios. We’re looking for ZIP codes with good rent:sale price ratios that still have reasonably high median sales prices. I've addeds stars in the table above next to the most promising ZIP codes.
+We then save out the map to a `.html` file...
 
-1. It looks like `21213` in Baltimore, Maryland has a great rent:sale price ratio at 1.17%, while maintaining a reasonably high median sales price at $120,500.
-2. Another interesting prospect is `48089` in Warren, Michigan. It has another really good rent:sale price ratio at 1.15%, and a median sales price of $105,000.
+```python
+m.save('../web_build/index.html')
+```
 
-These are the kinds of properties that  and start exploring those areas on Google Maps. Two great prospects worthy of further investigation!
+**Hosting A Simple Website:** I could have set up a server at Linode or some similar service. However, there are turnkey static site hosts that just ask you to upload a `.html` without any of the fuss around installing Apache or any other web server software.
+
+**Making It Happen Automatically:** I wanted this whole apparatus to run automatically at the press of a button. I didn't even want to have to download the datasets manually. Everything had to happen without any intervention on my part.
+
+So, I wrote a shell script that creates a directory structure, downloads all the needed data, and then runs a Python script.
+
+```console
+#!/bin/sh
+
+# NAVIGATE TO SCRIPT DIRECTORY
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR
+
+# DOWNLOAD & UNZIP SALES DATA
+echo "Downloading sales data..."
+wget "https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz"
+mkdir ./data/sales
+mv zip_code_market_tracker.tsv000.gz ./data/sales
+echo "Sales data download complete."
+
+echo "Unzipping sales data..."
+gzip -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz file after unzip
+echo "Sales data unzip complete."
+
+# DOWNLOAD RENTAL DATA
+echo "Downloading rental data..."
+wget "https://files.zillowstatic.com/research/public_csvs/zori/Zip_zori_sm_month.csv"
+mkdir ./data/rental
+mv Zip_zori_sm_month.csv ./data/rental
+echo "Rental data download complete..."
+
+# DOWNLOAD ZIP CODE POLYGONS
+echo "Downloading polygon data..."
+wget "https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_zcta520_500k.zip"
+mkdir ./data/polygon
+mv cb_2020_us_zcta520_500k.zip ./data/polygon
+echo "Polygon data download complete..."
+
+echo "Unzipping polygon data..."
+unzip ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
+rm ./data/polygon/cb_2020_us_zcta520_500k.zip
+echo "Polygon data unzip complete"
+
+# EXECUTE JUPYTER NOTEBOOK
+echo "Running python script..."
+jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
+echo "Python script complete"
+```
+
+The last line in the Python script that this shell script executes exports the `folium` map (with polygons) to an `index.html` file.
 
 ### Future work
 
