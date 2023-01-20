@@ -472,6 +472,8 @@ I wanted this whole apparatus to run automatically at the press of a button. I d
 
 So, I wrote a shell script that creates a directory structure, downloads all the needed data, and then runs a Python script.
 
+Here's the bit to download the data, unarchive it, and put each file in the right folders:
+
 ```console
 #!/bin/sh
 
@@ -508,23 +510,29 @@ echo "Unzipping polygon data..."
 unzip ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
 rm ./data/polygon/cb_2020_us_zcta520_500k.zip
 echo "Polygon data unzip complete"
+```
 
+After that, we execute the Jupyter Notebook:
+
+```
 # EXECUTE JUPYTER NOTEBOOK
 echo "Running python script..."
 jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
 echo "Python script complete"
 ```
 
-The last line in the Python script that this shell script executes exports the `folium` map (with polygons) to an `index.html` file.
+The last line in that `.ipynb` file exports the `folium` map with polygons to an `index.html` file. We then point the web hosting software to use that `index.html` file as the base directory.
+
+We then have a working, semi-automated way to throw a rich, data-filled map online for anyone to access!
+
+If you've gotten this far, thanks for reading!
 
 ### Future work
 
 - Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold _n_?
 - Could build an animated graph of the `RentToSalesRatio` graph as historical data and show how it evolves over time.
 - Upload to and run on a server, add `cron` scheduling.
-
 ---
-
 \* _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
 
 
