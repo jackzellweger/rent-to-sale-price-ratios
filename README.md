@@ -514,7 +514,7 @@ echo "Polygon data unzip complete"
 
 After that, we execute the Jupyter Notebook:
 
-```
+```console
 # EXECUTE JUPYTER NOTEBOOK
 echo "Running python script..."
 jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
