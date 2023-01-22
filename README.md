@@ -525,6 +525,8 @@ The last line in that `.ipynb` file exports the `folium` map with polygons to an
 
 We then have a working, semi-automated way to throw a rich, data-filled map online for anyone to access!
 
+<img src="./images/polygons-on-slippy.jpg">
+
 If you've gotten this far, thanks for reading!
 
 ### Future work
