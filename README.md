@@ -62,7 +62,7 @@ I envisioned ending up with a table like this:
 3. a column with median monthly rent price
 4. Then, a new column—the rent:sale price ratio—based on column 2 and 3.
 
-My main tool for crunching numbers had historically been Python’s SciPy library, but that seemed like overkill for this project. After some Googling, I decided to use Python and the Pandas library to tackle this problem. I had never used Pandas or the library’s ‘Dataframe’ objects, but it’s so simple!
+My main tool for crunching numbers had historically been Python’s SciPy library, but that seemed like overkill for this project. After some Googling, I decided to use Python and the Pandas library to tackle this problem. I had never used Pandas or the library’s `dataframe` objects, but it’s so simple!
 
 ***First, I imported the data…***
 
@@ -536,40 +536,3 @@ If you've gotten this far, thanks for reading!
 - Upload to and run on a server, add `cron` scheduling.
 ---
 \* _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
