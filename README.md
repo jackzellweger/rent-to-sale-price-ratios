@@ -46,7 +46,7 @@ and run the following commands...
 
 Once you've run those commands, you can run the following
 
-``
+`./build_map.sh`
 
 ### Motivation
 
