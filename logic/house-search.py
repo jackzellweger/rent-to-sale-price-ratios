@@ -68,13 +68,17 @@ currentRentalPrices = t2.groupby('RegionName').median().reset_index()
 booleanRentals = currentRentalPrices['RegionName'].duplicated().any()
 
 
-# In[6]:
+# In[14]:
 
 
 # JOINING THE DATABASE, CLEANING, & CALCULATING RENT:SALES
-combined=salesByZip.set_index('RegionName').join(currentRentalPrices.set_index('RegionName'))
+
+combined = salesByZip.set_index('RegionName'
+                                ).join(currentRentalPrices.set_index('RegionName'))
 rentalsAndSales = combined.dropna()
-rentalsAndSales["RentToSaleRatio"] = rentalsAndSales["CurrentRentalPrice"]/rentalsAndSales["CurrentSalesPrice"]
+rentalsAndSales['RentToSaleRatio'] = \
+    rentalsAndSales['CurrentRentalPrice'] \
+    / rentalsAndSales['CurrentSalesPrice']
 
 
 # In[7]:
@@ -94,39 +98,56 @@ rentalsAndSalesSorted = rentalsAndSalesFiltered.sort_values(by='RentToSaleRatio'
 # rentalsAndSalesSorted.loc[:,'RentToSaleRatio'][0:1800].to_csv(filepath)
 
 
-# In[9]:
-
-
-# IMPORTING SHAPEFILES
-shapefile = '../data/polygon/cb_2020_us_zcta520_500k.shp'
-gdf = gpd.read_file(shapefile)
-
-# SETTING UP BASE MAP
-testo = rentalsAndSalesSorted.join(gdf.set_index('NAME20')).dropna().sort_values('RegionName')
-gdf1 = gpd.GeoDataFrame(testo, geometry='geometry')
-m = folium.Map(location=[40.70, -98.94], zoom_start=4.0, tiles='CartoDB positron')
-color_map = branca.colormap.LinearColormap(['red', 'green'], vmin=0.000, vmax=0.016)
-
-for _, r in gdf1.iterrows():
-    shape_column = gpd.GeoSeries(r['geometry']).simplify(tolerance=0.001)
-    color = color_map(r['RentToSaleRatio'])
-    geo_j = shape_column.to_json()
-    geo_j_json = json.loads(geo_j)
-    geo_j_json['features'][0]['properties']['ratio'] = r['RentToSaleRatio']
-    geo_j = folium.GeoJson(data=geo_j_json,
-                           style_function=lambda x: {'fillColor': color_map(x['properties']['ratio']), 'color': 'black', 'weight': 0, 'fillOpacity': 0.9})
-    folium.Popup(str('{:.2f}% <br> {} <br> ${:,.0f} <br> ${:,.0f} '.format(r['RentToSaleRatio'] * 100, str(r['GEOID20']).zfill(5), r['CurrentSalesPrice'], r['CurrentRentalPrice'] ))).add_to(geo_j)
-    geo_j.add_to(m)
-m.save("../web_build/index.html")
-
-
 # In[10]:
 
 
-# USEFUL CODE
-    # PLOTTING THE ZIP CODES BY RENT:SALES
-        # s2=rentalsAndSalesSorted.plot(y='RentToSaleRatio',figsize=(10,7), use_index=False);
-    # SAMPLING VARIOUS REGIONS
-        # [rentalsAndSalesSorted.tail(10)]
-        # [rentalsAndSalesSorted.head(10)]
+# IMPORTING SHAPEFILES
+
+shapefile = '../data/polygon/cb_2020_us_zcta520_500k.shp'
+gdf = gpd.read_file(shapefile)
+
+# A BIT OF DATA CLEANING
+baseMap = rentalsAndSalesSorted.join(gdf.set_index('NAME20'
+        )).dropna().sort_values('RegionName')
+gdf1 = gpd.GeoDataFrame(baseMap, geometry='geometry')
+
+# SETTING THE BASE MAP
+m = folium.Map(location=[40.70, -98.94], zoom_start=4.0,
+               tiles='CartoDB positron')
+color_map = branca.colormap.LinearColormap(['red', 'green'],
+        vmin=0.000, vmax=0.016)
+
+# PLOTTING EACH POLYGON ON THE MAP
+for (_, r) in gdf1.iterrows():
+    shape_column = gpd.GeoSeries(r['geometry'
+                                 ]).simplify(tolerance=0.001)
+    color = color_map(r['RentToSaleRatio'])
+    geo_j = shape_column.to_json()
+    geo_j_json = json.loads(geo_j)
+    geo_j_json['features'][0]['properties']['ratio'] = \
+        r['RentToSaleRatio']
+    geo_j = folium.GeoJson(data=geo_j_json, style_function=lambda x: {
+            'fillColor': color_map(x['properties']['ratio']),
+            'color': 'black',
+            'weight': 0,
+            'fillOpacity': 0.9,
+            })
+    folium.Popup(str('{:.2f}% <br> {} <br> ${:,.0f} <br> ${:,.0f} '.format(r['RentToSaleRatio'
+                 ] * 100, str(r['GEOID20']).zfill(5),
+                 r['CurrentSalesPrice'], r['CurrentRentalPrice'
+                 ]))).add_to(geo_j)
+    geo_j.add_to(m)
+m.save('../web_build/index.html')
+
+
+# In[16]:
+
+
+gdf1
+
+
+# In[ ]:
+
+
+
 

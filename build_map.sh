@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # NAVIGATE TO SCRIPT DIRECTORY
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -31,11 +31,17 @@ mv cb_2020_us_zcta520_500k.zip ./data/polygon
 echo "Polygon data download complete..."
 
 echo "Unzipping polygon data..."
-unzip -f ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
+unzip -o ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
 rm ./data/polygon/cb_2020_us_zcta520_500k.zip
 echo "Polygon data unzip complete"
 
 # EXECUTE JUPYTER NOTEBOOK
 echo "Running python script..."
-jupyter nbconvert --execute $SCRIPT_DIR/logic/house-search.ipynb --to python
+
+# Activate virtual environment
+source ./myenv/bin/activate
+
+# Convert & run notebook
+jupyter nbconvert $SCRIPT_DIR/logic/house-search.ipynb --to python
+python3  ./logic/house-search.py
 echo "Python script complete"
