@@ -7,6 +7,7 @@ cd $SCRIPT_DIR
 # DOWNLOAD & UNZIP SALES DATA
 echo "Downloading sales data..."
 wget "https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz"
+mkdir ./data
 mkdir ./data/sales
 mv zip_code_market_tracker.tsv000.gz ./data/sales
 echo "Sales data download complete."
