@@ -13,7 +13,7 @@ mv zip_code_market_tracker.tsv000.gz ./data/sales
 echo "Sales data download complete."
 
 echo "Unzipping sales data..."
-gzip -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz file after unzip
+gzip -f -d ./data/sales/zip_code_market_tracker.tsv000.gz # Automatically removes .gz file after unzip
 echo "Sales data unzip complete."
 
 # DOWNLOAD RENTAL DATA
@@ -31,7 +31,7 @@ mv cb_2020_us_zcta520_500k.zip ./data/polygon
 echo "Polygon data download complete..."
 
 echo "Unzipping polygon data..."
-unzip ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
+unzip -f ./data/polygon/cb_2020_us_zcta520_500k.zip -d ./data/polygon
 rm ./data/polygon/cb_2020_us_zcta520_500k.zip
 echo "Polygon data unzip complete"
 
