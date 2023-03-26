@@ -1,5 +1,71 @@
 # Finding Investment Opportunities
 
+### Installation
+
+I am working on a standard Debian 11 install in the `opt` directory with the following structure.
+
+```text
+.
+|-- bin
+...
+|-- opt
+   |-- rent-to-sale-price-ratios
+      |-- build_map.sh
+      |-- data
+      |-- db
+      |-- images
+      |-- logic
+      |-- prototype
+      |-- README.md
+      `-- web_build
+```
+
+In order to get this running on a fresh Debian 11 image, we need to install the following packages and dependencies.
+
+```
+git
+pip3
+jupyter
+sqlite3
+python3
+```
+
+Using your favorite CLI text-editor, you can create a `.sh` file and paste the following. 
+
+```
+#!/bin/bash
+
+# Update package index
+sudo apt-get update
+
+# Install Git
+sudo apt-get install -y git
+
+# Install SQLite
+sudo apt-get install -y sqlite3
+
+# Create directory for the SQLite database
+sudo mkdir -p /opt/rent-to-sale-price-ratios/data/db
+
+# Install Python 3 and pip
+sudo apt-get install -y python3 python3-pip
+
+# Install Jupyter
+pip3 install jupyter
+
+# Clone application scripts into ./opt
+git clone https://github.com/jackzellweger/rent-to-sale-price-ratios.git ./opt
+
+echo "Packages and dependencies have been installed."
+
+echo "Building map..."
+
+sh ./opt/rent-to-sale-price-ratios/build_map.py
+
+```
+
+Save, exit the editor, run the following to ensure permissions are proper `chmod +x install_dependencies.sh`. Then run the script with `./install_dependencies.sh`.
+
 ### Try It Here
 
 [Click here](https://stellar-khapse-0bf486.netlify.app/)
