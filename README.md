@@ -1,4 +1,6 @@
-# Finding Investment Opportunities
+### Try It Here
+
+[Click here](https://stellar-khapse-0bf486.netlify.app/)
 
 ### Installation
 
@@ -65,10 +67,6 @@ sh ./opt/rent-to-sale-price-ratios/build_map.py
 ```
 
 Save, exit the editor, run the following to ensure permissions are proper `chmod +x install_dependencies.sh`. Then run the script with `./install_dependencies.sh`.
-
-### Try It Here
-
-[Click here](https://stellar-khapse-0bf486.netlify.app/)
 
 ### Motivation
 
