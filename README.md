@@ -32,41 +32,21 @@ sqlite3
 python3
 ```
 
-Using your favorite CLI text-editor, you can create a `.sh` file and paste the following. 
+Navigate to the root directory in the CLI with...
 
-```
-#!/bin/bash
+`cd /root/..`
 
-# Update package index
-sudo apt-get update
+and run the following commands...
 
-# Install Git
-sudo apt-get install -y git
+`sudo apt-get update; sudo apt-get install -y git`
 
-# Install SQLite
-sudo apt-get install -y sqlite3
+`mkdir ./opt; mkdir ./opt/real_estate_project`
 
-# Create directory for the SQLite database
-sudo mkdir -p /opt/rent-to-sale-price-ratios/data/db
+`git clone https://github.com/jackzellweger/rent-to-sale-price-ratios.git ./opt/real_estate_project`
 
-# Install Python 3 and pip
-sudo apt-get install -y python3 python3-pip
+Once you've run those commands, you can run the following
 
-# Install Jupyter
-pip3 install jupyter
-
-# Clone application scripts into ./opt
-git clone https://github.com/jackzellweger/rent-to-sale-price-ratios.git ./opt
-
-echo "Packages and dependencies have been installed."
-
-echo "Building map..."
-
-sh ./opt/rent-to-sale-price-ratios/build_map.py
-
-```
-
-Save, exit the editor, run the following to ensure permissions are proper `chmod +x install_dependencies.sh`. Then run the script with `./install_dependencies.sh`.
+``
 
 ### Motivation
 
