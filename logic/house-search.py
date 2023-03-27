@@ -18,8 +18,28 @@ import os
 
 # 2023 DATA IMPORTS
 
-sales = pd.read_csv('../data/sales/zip_code_market_tracker.tsv000', sep='\t',header=0)
-rentals = pd.read_csv('../data/rental/Zip_zori_sm_month.csv', sep=',', header=0, converters={'RegionName': lambda x: x.zfill(5)})
+# Function to get the absolute path and update file permissions
+def get_absolute_path_and_update_permissions(relative_path):
+    current_working_directory = os.getcwd()
+    absolute_path = os.path.join(current_working_directory, relative_path)
+    absolute_path = os.path.abspath(absolute_path)
+
+    # Check if the file exists
+    if not os.path.isfile(absolute_path):
+        raise FileNotFoundError(f"File not found: {absolute_path}")
+
+    # Change file permissions to make it readable
+    os.chmod(absolute_path, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+
+    return absolute_path
+
+# Get absolute paths and update permissions for both files
+sales_file_path = get_absolute_path_and_update_permissions('../data/sales/zip_code_market_tracker.tsv000')
+rentals_file_path = get_absolute_path_and_update_permissions('../data/rental/Zip_zori_sm_month.csv')
+
+# Read the files using the absolute paths
+sales = pd.read_csv(sales_file_path, sep='\t', header=0)
+rentals = pd.read_csv(rentals_file_path, sep=',', header=0, converters={'RegionName': lambda x: x.zfill(5)})
 
 
 # In[3]:
