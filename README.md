@@ -11,15 +11,15 @@ I am working on a standard Debian 11 install in the `opt` directory with the fol
 |-- bin
 ...
 |-- opt
-   |-- rent-to-sale-price-ratios
-      |-- build_map.sh
-      |-- data
-      |-- db
-      |-- images
-      |-- logic
-      |-- prototype
-      |-- README.md
-      `-- web_build
+   |--real_estate_project
+      |-- rent-to-sale-price-ratios
+         |-- build_map.sh
+         |-- data
+         |-- images
+         |-- logic
+         |-- prototype
+         |-- README.md
+         `-- web_build
 ```
 
 In order to get this running on a fresh Debian 11 image, we need to install the following packages and dependencies.
@@ -44,9 +44,11 @@ and run the following commands...
 
 `git clone https://github.com/jackzellweger/rent-to-sale-price-ratios.git ./opt/real_estate_project`
 
-Once you've run those commands, you can run the following
+Once you've run those commands, navigate to the `rent-to-sale-price-ratios` folder, and you can run the following.
 
 `./build_map.sh`
+
+This will add a file called `index.html` to the `web_build` folder. I am using netlify, a continuous deployment hosting service to automatically push this new file out whenever it's updated. You can [click here](https://stellar-khapse-0bf486.netlify.app/) to see the file live on the web.
 
 ### Motivation
 
