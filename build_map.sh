@@ -41,7 +41,11 @@ echo "Running python script..."
 # Activate virtual environment
 source ./myenv/bin/activate
 
-# Convert & run notebook
+# Convert notebook
 jupyter nbconvert $SCRIPT_DIR/logic/house-search.ipynb --to python
-python3  ./logic/house-search.py
+
+# Run notebook
+cd $SCRIPT_DIR/logic
+python3  ./house-search.py
+
 echo "Python script complete"
