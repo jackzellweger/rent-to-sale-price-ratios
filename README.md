@@ -580,5 +580,6 @@ If you've gotten this far, thanks for reading!
 - Count the number of sales that contributed to the sales medians and then filter out the zip codes below some threshold _n_?
 - Could build an animated graph of the `RentToSalesRatio` graph as historical data and show how it evolves over time.
 - Upload to and run on a server, add `cron` scheduling.
+- Currently, this program requires a lot of memory. I'd like to add some garbage collection so unused dataframes are deallocated to improve memory usage.
 ---
 \* _I performed many unit tests in order to verify my results as part of this project. I left out many of those details as part of this write-up._
