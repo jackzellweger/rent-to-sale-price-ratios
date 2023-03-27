@@ -1,8 +1,8 @@
-### Try It Here
+# Try It!
 
 [Click here](https://stellar-khapse-0bf486.netlify.app/)
 
-### Installation
+# Installation
 
 I am working on a standard Debian 11 install in the `opt` directory with the following structure.
 
@@ -44,11 +44,21 @@ and run the following commands...
 
 `git clone https://github.com/jackzellweger/rent-to-sale-price-ratios.git ./opt/real_estate_project`
 
-Once you've run those commands, navigate to the `rent-to-sale-price-ratios` folder, and you can run the following.
+Once you've run those commands, navigate to the `rent-to-sale-price-ratios` folder...
+
+`cd opt/real_estate_project/rent-to-sale-price-ratios`
+
+and you can run the following.
 
 `./build_map.sh`
 
 This will add a file called `index.html` to the `web_build` folder. I am using netlify, a continuous deployment hosting service to automatically push this new file out whenever it's updated. You can [click here](https://stellar-khapse-0bf486.netlify.app/) to see the file live on the web.
+
+### Troubleshooting
+
+- If you get a `Killed` message afer running `build_map.sh`, try increasing your server's memory limit. I am currently working on memory optimizations that will cut memory requirements to ~4gb.
+
+# Project
 
 ### Motivation
 
